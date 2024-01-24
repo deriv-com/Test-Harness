@@ -279,7 +279,7 @@ sub _order_tokens {
 
     my %copy = %{ $self->{tokens} };
     my @ordered_tokens = grep {defined}
-      map { delete $copy{$_} } qw( simple_test test subtest comment plan )
+      map { delete $copy{$_} } qw( simple_test test subtest comment plan );
     push @ordered_tokens, values %copy;
 
     $self->{ordered_tokens} = \@ordered_tokens;
