@@ -99,8 +99,8 @@ sub prefix_description {
 sub full_description {
     my $self = shift;
     my $desc = $self->description;
-    my $prefix_desc = $self->{prefix_description} // '';
-    return "$prefix_desc:$desc";
+    my $prefix_desc = $self->{prefix_description};
+    return $prefix_desc ? "$prefix_desc:$desc": $desc;
 }
 
 ##############################################################################
