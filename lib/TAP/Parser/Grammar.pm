@@ -132,7 +132,7 @@ my %language_for;
 
                 return $self->_make_test_token(
                     $line, $ok, $num,
-                    $desc
+                    $desc, undef, undef, 0
                 );
             },
         },

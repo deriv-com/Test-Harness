@@ -227,7 +227,8 @@ $expected = {
     'directive'   => '',
     'description' => 'this is a test',
     'test_num'    => '1',
-    'raw'         => 'ok 1 this is a test'
+    'raw'         => 'ok 1 this is a test',
+    'prefix_length' => 0,
 };
 is_deeply $token, $expected,
   '... and the token should contain the correct data';
