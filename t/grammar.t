@@ -7,7 +7,7 @@ BEGIN {
     unshift @INC, 't/lib';
 }
 
-use Test::More tests => 94;
+use Test::More tests => 98;
 
 use EmptyParser;
 use TAP::Parser::Grammar;
