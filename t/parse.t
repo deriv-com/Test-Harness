@@ -1004,7 +1004,7 @@ END_TAP
     my $state_table = $parser->_make_state_table;
     my @states      = sort keys %$state_table;
     my @expect      = sort qw(
-      bailout comment plan pragma test unknown version yaml
+      bailout comment plan pragma subtest test unknown version yaml
     );
 
     my %reachable = ( INIT => 1 );

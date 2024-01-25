@@ -8,6 +8,7 @@ use TAP::Parser::Result::Comment ();
 use TAP::Parser::Result::Plan    ();
 use TAP::Parser::Result::Pragma  ();
 use TAP::Parser::Result::Test    ();
+use TAP::Parser::Result::Subtest ();
 use TAP::Parser::Result::Unknown ();
 use TAP::Parser::Result::Version ();
 use TAP::Parser::Result::YAML    ();
@@ -98,6 +99,7 @@ our %CLASS_FOR = (
 	plan    => 'TAP::Parser::Result::Plan',
 	pragma  => 'TAP::Parser::Result::Pragma',
 	test    => 'TAP::Parser::Result::Test',
+	subtest => 'TAP::Parser::Result::Subtest',
 	comment => 'TAP::Parser::Result::Comment',
 	bailout => 'TAP::Parser::Result::Bailout',
 	version => 'TAP::Parser::Result::Version',

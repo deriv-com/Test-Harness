@@ -132,15 +132,15 @@ my %language_for;
 
                 return $self->_make_test_token(
                     $line, $ok, $num,
-                    $desc
+                    $desc, undef, undef, 0
                 );
             },
         },
         test => {
-            syntax  => qr/^($ok) \s* ($num)? \s* (.*) \z/x,
+            syntax  => qr/^(\s*)($ok) \s* ($num)? \s* (.*) \z/x,
             handler => sub {
                 my ( $self, $line ) = @_;
-                my ( $ok, $num, $desc ) = ( $1, $2, $3 );
+                my ( $prefix_length, $ok, $num, $desc ) = ( length($1), $2, $3, $4 );
                 my ( $dir, $explanation ) = ( '', '' );
                 if ($desc =~ m/^ ( [^\\\#]* (?: \\. [^\\\#]* )* )
                        \# \s* (SKIP|TODO) \b \s* (.*) $/ix
@@ -150,12 +150,20 @@ my %language_for;
                 }
                 return $self->_make_test_token(
                     $line, $ok, $num, $desc,
-                    $dir,  $explanation
+                    $dir,  $explanation, $prefix_length
                 );
             },
         },
+        subtest => {
+            syntax  => qr/^\s*# Subtest: (.*)/,
+            handler => sub {
+                my ( $self, $line ) = @_;
+                my $desc = $1;
+                return $self->_make_subtest_token( $line, $desc);
+            },
+        },
         comment => {
-            syntax  => qr/^#(.*)/,
+            syntax  => qr/^#(?! Subtest:)(.*)/,
             handler => sub {
                 my ( $self, $line ) = @_;
                 my $comment = $1;
@@ -271,7 +279,7 @@ sub _order_tokens {
 
     my %copy = %{ $self->{tokens} };
     my @ordered_tokens = grep {defined}
-      map { delete $copy{$_} } qw( simple_test test comment plan );
+      map { delete $copy{$_} } qw( simple_test test subtest comment plan );
     push @ordered_tokens, values %copy;
 
     $self->{ordered_tokens} = \@ordered_tokens;
@@ -407,7 +415,7 @@ sub _make_plan_token {
 }
 
 sub _make_test_token {
-    my ( $self, $line, $ok, $num, $desc, $dir, $explanation ) = @_;
+    my ( $self, $line, $ok, $num, $desc, $dir, $explanation, $prefix_length ) = @_;
     return {
         ok          => $ok,
 
@@ -419,6 +427,16 @@ sub _make_test_token {
         explanation => _trim($explanation),
         raw         => $line,
         type        => 'test',
+        prefix_length => $prefix_length,
+    };
+}
+
+sub _make_subtest_token {
+    my ( $self, $line, $desc ) = @_;
+    return {
+        type        => 'subtest',
+        raw         => $line,
+        description => _trim($desc),
     };
 }
 

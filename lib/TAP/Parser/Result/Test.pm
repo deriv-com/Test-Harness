@@ -67,6 +67,18 @@ sub _number {
 
 ##############################################################################
 
+=head3 C<prefix_length>
+    my $prefix_length = $result->prefix_length;
+    
+Returns the length of prefix string before the test number.  This is used to prepend strings before the test string
+=cut
+
+sub prefix_length {
+    shift->{prefix_length} // 0;
+}
+
+##############################################################################
+
 =head3 C<description>
 
   my $description = $result->description;
@@ -77,6 +89,19 @@ test number but before the directive.
 =cut
 
 sub description { shift->{description} }
+
+sub prefix_description {
+    my $self = shift;
+    $self->{prefix_description} = shift if @_;
+    return $self->{prefix_description};
+}
+
+sub full_description {
+    my $self = shift;
+    my $desc = $self->description;
+    my $prefix_desc = $self->{prefix_description};
+    return $prefix_desc ? "$prefix_desc:$desc": $desc;
+}
 
 ##############################################################################
 

@@ -7,7 +7,7 @@ BEGIN {
     unshift @INC, 't/lib';
 }
 
-use Test::More tests => 94;
+use Test::More tests => 98;
 
 use EmptyParser;
 use TAP::Parser::Grammar;
@@ -47,7 +47,7 @@ isa_ok $grammar, $GRAMMAR, '... and the object it returns';
 # why.  We'll still use the instance because that should be forward
 # compatible.
 
-my @V12 = sort qw(bailout comment plan simple_test test version);
+my @V12 = sort qw(bailout comment plan simple_test test subtest version);
 my @V13 = sort ( @V12, 'pragma', 'yaml' );
 
 can_ok $grammar, 'token_types';
@@ -227,7 +227,8 @@ $expected = {
     'directive'   => '',
     'description' => 'this is a test',
     'test_num'    => '1',
-    'raw'         => 'ok 1 this is a test'
+    'raw'         => 'ok 1 this is a test',
+    'prefix_length' => 0,
 };
 is_deeply $token, $expected,
   '... and the token should contain the correct data';
@@ -248,7 +249,8 @@ $expected = {
     'directive'   => 'TODO',
     'description' => 'this is a test',
     'test_num'    => '2',
-    'raw'         => 'not ok 2 this is a test # TODO whee!'
+    'raw'         => 'not ok 2 this is a test # TODO whee!',
+    'prefix_length' => 0,
 };
 is_deeply $token, $expected, '... and the TODO should be parsed';
 
@@ -269,7 +271,8 @@ $expected = {
     'directive'   => '',
     'description' => 'this is a test \# TODO whee!',
     'test_num'    => '22',
-    'raw'         => 'ok 22 this is a test \# TODO whee!'
+    'raw'         => 'ok 22 this is a test \# TODO whee!',
+    'prefix_length' => 0,
 };
 is_deeply $token, $expected,
   '... and the token should contain the correct data';
